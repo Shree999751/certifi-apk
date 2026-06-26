@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 // Trigger GitHub Pages Actions build
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/certifi-apk/',
+  base: './',
   plugins: [react(), tailwindcss()],
   build: {
     rollupOptions: {
