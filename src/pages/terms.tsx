@@ -18,7 +18,7 @@ const TermsPage: React.FC = () => {
         </div>
 
         <a 
-          href="/index.html" 
+          href="index.html" 
           className="h-9 border border-hairline rounded-full bg-primary text-on-primary hover:bg-primary/95 px-5 flex items-center justify-center text-xs font-semibold shadow-level4 transition duration-150 cursor-pointer"
         >
           Back to Dashboard
@@ -97,13 +97,12 @@ const TermsPage: React.FC = () => {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="w-full border-t border-hairline bg-canvas py-8 text-center text-xs text-mute font-mono space-y-3">
         <div className="flex justify-center gap-6">
-          <a href="/about.html" className="hover:text-primary transition">About Us</a>
-          <a href="/privacy.html" className="hover:text-primary transition">Privacy Policy</a>
-          <a href="/terms.html" className="hover:text-primary transition">Terms of Service</a>
-          <a href="/contact.html" className="hover:text-primary transition">Contact Us</a>
+          <a href="about.html" className="hover:text-primary transition">About Us</a>
+          <a href="privacy.html" className="hover:text-primary transition">Privacy Policy</a>
+          <a href="terms.html" className="hover:text-primary transition">Terms of Service</a>
+          <a href="contact.html" className="hover:text-primary transition">Contact Us</a>
         </div>
         <p>© 2026 Community Hero Hyperlocal Solver. All rights reserved.</p>
       </footer>
