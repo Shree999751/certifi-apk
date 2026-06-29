@@ -146,7 +146,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   };
 
   return (
-    <div className="relative w-full h-full min-h-[350px] md:min-h-[500px] border border-hairline bg-canvas rounded-lg overflow-hidden shadow-level2">
+    <div className="relative w-full h-full min-h-[320px] sm:min-h-[400px] lg:min-h-[580px] border border-hairline bg-canvas rounded-lg overflow-hidden shadow-level2">
       <div ref={mapRef} className="w-full h-full z-10"></div>
       
       {/* Map Legend Overlay */}

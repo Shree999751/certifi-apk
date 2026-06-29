@@ -103,14 +103,14 @@ const PrivacyPage: React.FC = () => {
         </div>
       </main>
 
-      <footer className="w-full border-t border-hairline bg-canvas py-8 text-center text-xs text-mute font-mono space-y-3">
-        <div className="flex justify-center gap-6">
-          <a href="about.html" className="hover:text-primary transition">About Us</a>
-          <a href="privacy.html" className="hover:text-primary transition">Privacy Policy</a>
-          <a href="terms.html" className="hover:text-primary transition">Terms of Service</a>
-          <a href="contact.html" className="hover:text-primary transition">Contact Us</a>
+      <footer className="w-full border-t border-hairline bg-canvas py-8 text-center text-xs text-mute font-mono space-y-3 px-4">
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+          <a href="about.html" className="hover:text-primary transition whitespace-nowrap">About Us</a>
+          <a href="privacy.html" className="hover:text-primary transition whitespace-nowrap">Privacy Policy</a>
+          <a href="terms.html" className="hover:text-primary transition whitespace-nowrap">Terms of Service</a>
+          <a href="contact.html" className="hover:text-primary transition whitespace-nowrap">Contact Us</a>
         </div>
-        <p>© 2026 Community Hero Hyperlocal Solver. All rights reserved.</p>
+        <p className="leading-relaxed">© 2026 Community Hero Hyperlocal Solver. All rights reserved.</p>
       </footer>
     </div>
   );

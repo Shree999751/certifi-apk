@@ -47,7 +47,7 @@ export const IssueCard: React.FC<IssueCardProps> = ({
   return (
     <div 
       onClick={() => onInspect(issue.id)}
-      className="group border border-hairline bg-canvas hover:border-hairline-strong hover:shadow-level3 rounded-lg p-5 transition duration-200 flex flex-col justify-between h-full select-none cursor-pointer"
+      className="group border border-hairline bg-canvas hover:border-link/35 rounded-lg p-5 flex flex-col justify-between h-full select-none cursor-pointer card-elevator hover:shadow-level4 active-press"
     >
       <div>
         {/* Top header: Category and Status */}
@@ -76,6 +76,11 @@ export const IssueCard: React.FC<IssueCardProps> = ({
         <h3 className="text-sm font-bold text-primary mb-1.5 leading-snug group-hover:text-link transition duration-150">
           {issue.title}
         </h3>
+        {issue.reporterName && (
+          <span className="block text-[10px] font-mono text-mute mb-2">
+            Reported by: <span className="font-semibold text-primary">{issue.reporterName}</span>
+          </span>
+        )}
         <p className="text-xs text-body line-clamp-3 leading-relaxed mb-4">
           {issue.description}
         </p>
@@ -90,7 +95,7 @@ export const IssueCard: React.FC<IssueCardProps> = ({
               e.stopPropagation();
               onVote(issue.id, 'up');
             }}
-            className="h-7 border border-hairline rounded-full bg-canvas text-body hover:bg-canvas-soft-2 px-2.5 flex items-center gap-1 text-[11px] font-mono hover:text-success hover:border-success/30 transition shadow-level2 cursor-pointer"
+            className="h-7 border border-hairline rounded-full bg-canvas text-body hover:bg-canvas-soft-2 px-2.5 flex items-center gap-1 text-[11px] font-mono hover:text-success hover:border-success/30 transition shadow-level2 cursor-pointer active-press"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-thumbs-up"><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/><path d="M14 22a2.9 2.9 0 0 0 2.8-2.9l-.8-7.8A2 2 0 0 0 14 9.3H9.7V3a3 3 0 0 0-3-3H6.5"/><path d="M14 9.3h4a2 2 0 0 1 2 2v2.5a2 2 0 0 1-.6 1.4l-4.5 4.5a2 2 0 0 1-1.4.6H14"/></svg>
             <span>{issue.upvotes}</span>
@@ -101,7 +106,7 @@ export const IssueCard: React.FC<IssueCardProps> = ({
               e.stopPropagation();
               onVote(issue.id, 'down');
             }}
-            className="h-7 border border-hairline rounded-full bg-canvas text-body hover:bg-canvas-soft-2 px-2.5 flex items-center gap-1 text-[11px] font-mono hover:text-error hover:border-error/30 transition shadow-level2 cursor-pointer"
+            className="h-7 border border-hairline rounded-full bg-canvas text-body hover:bg-canvas-soft-2 px-2.5 flex items-center gap-1 text-[11px] font-mono hover:text-error hover:border-error/30 transition shadow-level2 cursor-pointer active-press"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-thumbs-down"><path d="M17 2H20a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/><path d="M10 2a2.9 2.9 0 0 0-2.8 2.9l.8 7.8A2 2 0 0 0 10 14.7h4.3V20a3 3 0 0 0 3 3h.2"/><path d="M10 14.7H6a2 2 0 0 1-2-2V10.2a2 2 0 0 1 .6-1.4l4.5-4.5A2 2 0 0 1 10.5 2H10"/></svg>
             <span>{issue.downvotes}</span>

@@ -108,13 +108,13 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-[1000] h-16 w-full border-b border-hairline bg-canvas/90 backdrop-blur-md px-6 flex items-center justify-between">
+    <header className="sticky top-0 z-[1000] h-16 w-full border-b border-hairline bg-canvas/90 backdrop-blur-md px-3 sm:px-6 flex items-center justify-between">
       {/* Left Side: Logo */}
       <div className="flex items-center gap-3">
         <div className="h-8 w-8 bg-primary rounded-md flex items-center justify-center text-on-primary font-mono font-bold text-lg select-none">
           H
         </div>
-        <div className="flex flex-col">
+        <div className="hidden sm:flex flex-col">
           <span className="font-mono uppercase tracking-widest text-[11px] font-bold text-primary">{t.appName}</span>
           <span className="text-sm font-semibold tracking-tight text-ink mt-[-2px] flex items-center gap-1.5">
             <span>Community Hero</span>
@@ -133,7 +133,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Center: Location Search Input */}
-      <div className="relative flex-1 max-w-sm mx-4" ref={dropdownRef}>
+      <div className="relative flex-1 max-w-[140px] sm:max-w-sm mx-1 sm:mx-4" ref={dropdownRef}>
         <div className="relative">
           <input
             type="text"
@@ -158,7 +158,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Suggestions Dropdown */}
         {showDropdown && suggestions.length > 0 && (
-          <div className="absolute top-10 left-0 w-full bg-canvas border border-hairline rounded-lg shadow-level4 z-[2000] overflow-hidden divide-y divide-hairline">
+          <div className="absolute top-10 left-0 w-full bg-canvas border border-hairline rounded-lg shadow-level4 z-[2000] overflow-hidden divide-y divide-hairline animate-fade-in animate-slide-up">
             {suggestions.map((item, idx) => {
               const addr = item.address || {};
               const city = addr.city || addr.town || addr.village || addr.municipality || addr.suburb || item.display_name.split(',')[0];
@@ -168,7 +168,7 @@ export const Header: React.FC<HeaderProps> = ({
                   key={idx}
                   type="button"
                   onClick={() => handleSelectSuggestion(item)}
-                  className="w-full text-left px-4 py-2 hover:bg-canvas-soft-2 transition text-xs flex flex-col gap-0.5 cursor-pointer"
+                  className="w-full text-left px-4 py-2 hover:bg-canvas-soft-2 transition text-xs flex flex-col gap-0.5 cursor-pointer active-press"
                 >
                   <span className="font-bold text-primary truncate">{city}</span>
                   <span className="text-[10px] text-mute font-mono truncate">{state || item.display_name}</span>
@@ -180,7 +180,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Right Side: User Profile XP, Language Selection & Settings */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-3">
         {/* Localized stats counts */}
         <div className="hidden lg:flex items-center gap-3 text-[11px] font-mono text-body mr-1">
           <div>
@@ -228,13 +228,13 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* User details and logout */}
         {currentUser && (
-          <div className="flex items-center gap-3 border-l border-hairline pl-3">
-            <span className="text-xs font-bold text-primary truncate max-w-[100px] sm:max-w-[150px]" title={currentUser.fullName}>
+          <div className="flex items-center gap-1.5 sm:gap-3 border-l border-hairline pl-1.5 sm:pl-3">
+            <span className="hidden md:inline text-xs font-bold text-primary truncate max-w-[100px] sm:max-w-[150px]" title={currentUser.fullName}>
               {currentUser.username}
             </span>
             <button
               onClick={onLogout}
-              className="h-8 border border-error/20 bg-error-soft/10 text-error hover:bg-error-soft/30 px-3 text-xs font-semibold rounded-full transition cursor-pointer"
+              className="h-8 border border-error/20 bg-error-soft/10 text-error hover:bg-error-soft/30 px-2 sm:px-3 text-[10px] sm:text-xs font-semibold rounded-full transition cursor-pointer active-press"
             >
               Logout
             </button>
@@ -244,10 +244,10 @@ export const Header: React.FC<HeaderProps> = ({
         {/* AI Configuration Button */}
         <button 
           onClick={onOpenApiModal}
-          className="h-8 border border-hairline rounded-full bg-canvas text-ink px-3 flex items-center gap-1.5 text-xs font-medium hover:bg-canvas-soft-2 active:bg-hairline transition shadow-level2 cursor-pointer"
+          className="h-8 border border-hairline rounded-full bg-canvas text-ink px-2 sm:px-3 flex items-center gap-1 sm:gap-1.5 text-xs font-medium hover:bg-canvas-soft-2 active:bg-hairline transition shadow-level2 cursor-pointer active-press"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="text-cyan-deep"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 6Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
-          <span>System Settings</span>
+          <span className="hidden sm:inline">System Settings</span>
         </button>
       </div>
     </header>

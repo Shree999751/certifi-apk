@@ -377,12 +377,12 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[5000] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[5000] flex items-center justify-center p-4 animate-fade-in">
       {/* Backdrop */}
-      <div onClick={onClose} className="absolute inset-0 bg-primary/30 backdrop-blur-[4px]"></div>
+      <div onClick={onClose} className="absolute inset-0 bg-primary/40 backdrop-blur-md"></div>
 
       {/* Modal Card */}
-      <div className="relative bg-canvas border border-hairline rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-level5 z-10 flex flex-col p-6 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-canvas border border-hairline rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-level5 z-10 flex flex-col p-6 animate-slide-up">
         
         {/* Header */}
         <div className="flex items-center justify-between border-b border-hairline pb-4 mb-4">
@@ -527,7 +527,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
               
               {/* Autocomplete Suggestions Dropdown */}
               {suggestions.length > 0 && (
-                <ul className="absolute left-0 right-0 top-[66px] mt-1 bg-canvas border border-hairline rounded-lg shadow-level4 max-h-48 overflow-y-auto z-[6000] divide-y divide-hairline">
+                <ul className="absolute left-0 right-0 top-[66px] mt-1 bg-canvas border border-hairline rounded-lg shadow-level4 max-h-48 overflow-y-auto z-[6000] divide-y divide-hairline animate-fade-in animate-slide-up">
                   {suggestions.map((s, idx) => {
                     const shortName = s.display_name.split(',').slice(0, 3).map((p: string) => p.trim()).join(', ');
                     return (
@@ -539,7 +539,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                           setModalLng(parseFloat(s.lon));
                           setSuggestions([]);
                         }}
-                        className="p-2.5 text-xs hover:bg-canvas-soft-2 cursor-pointer truncate text-body flex flex-col text-left"
+                        className="p-2.5 text-xs hover:bg-canvas-soft-2 cursor-pointer truncate text-body flex flex-col text-left transition duration-150 active-press"
                       >
                         <span className="font-semibold text-primary">{shortName}</span>
                         <span className="text-[10px] text-mute truncate mt-0.5">{s.display_name}</span>
@@ -622,7 +622,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
             <button 
               type="button" 
               onClick={onClose} 
-              className="h-10 border border-hairline rounded-full bg-canvas text-body hover:bg-canvas-soft-2 px-5 text-sm font-semibold transition cursor-pointer"
+              className="h-10 border border-hairline rounded-full bg-canvas text-body hover:bg-canvas-soft-2 px-5 text-sm font-semibold transition cursor-pointer active-press"
             >
               {t.cancelBtn}
             </button>
@@ -630,7 +630,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
             <button 
               type="submit" 
               disabled={isSubmitting}
-              className="h-10 border border-hairline rounded-full bg-primary text-on-primary hover:bg-primary/90 px-6 text-sm font-semibold transition flex items-center gap-1.5 shadow-level4 cursor-pointer disabled:opacity-55"
+              className="h-10 border border-hairline rounded-full bg-primary text-on-primary hover:bg-primary/90 px-6 text-sm font-semibold transition flex items-center gap-1.5 shadow-level4 cursor-pointer disabled:opacity-55 active-press"
             >
               <span>{isSubmitting ? "Saving..." : t.submitBtn}</span>
               {!isSubmitting && <span className="text-xs bg-canvas/10 px-1.5 py-0.5 rounded-full font-mono text-[9px]">+50 XP</span>}

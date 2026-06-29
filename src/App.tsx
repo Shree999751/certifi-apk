@@ -196,18 +196,33 @@ export default function App() {
 
       // Self-seed remote DB if empty
       if (docs.length === 0) {
+        setIssues(initialIssues);
+        localStorage.setItem('civic_issues', JSON.stringify(initialIssues));
         initialIssues.forEach(async (issue) => {
-          await setDoc(doc(db, 'issues', issue.id), issue);
+          try {
+            await setDoc(doc(db, 'issues', issue.id), issue);
+          } catch (err) {
+            console.error('Failed to seed issue:', issue.id, err);
+          }
         });
       } else {
         setIssues(docs);
+        localStorage.setItem('civic_issues', JSON.stringify(docs));
       }
     }, (error) => {
       console.error('Firestore listener error:', error);
+      // Fallback to local cache mode on connection/permission failure
+      setFbServices(null);
     });
 
     return () => unsubscribe();
   }, [fbServices]);
+
+  // Log in success handler
+  const handleLoginSuccess = (user: UserProfile) => {
+    setCurrentUser(user);
+    localStorage.setItem('logged_in_user', JSON.stringify(user));
+  };
 
   // Log out session
   const handleLogout = () => {
@@ -301,7 +316,8 @@ export default function App() {
           comments: [],
           createdAt: new Date(Date.now() - 36e5 * 24).toISOString(),
           actionPlan: `Deploy asphalt repair crew from nearest ${location.city} civic division.`,
-          address: `Main Road, ${location.city}, ${location.state}`
+          address: `Main Road, ${location.city}, ${location.state}`,
+          reporterName: 'Community Assistant'
         },
         {
           id: 'issue-auto-2-' + Date.now(),
@@ -319,7 +335,8 @@ export default function App() {
           comments: [],
           createdAt: new Date(Date.now() - 36e5 * 12).toISOString(),
           actionPlan: `Replace burnt LED element on junction pole.`,
-          address: `Near Junction, ${location.city}, ${location.state}`
+          address: `Near Junction, ${location.city}, ${location.state}`,
+          reporterName: 'Community Assistant'
         },
         {
           id: 'issue-auto-3-' + Date.now(),
@@ -337,12 +354,24 @@ export default function App() {
           comments: [],
           createdAt: new Date(Date.now() - 36e5 * 4).toISOString(),
           actionPlan: `Schedule emergency waste collection disposal truck.`,
-          address: `Near municipal container, ${location.city}, ${location.state}`
+          address: `Near municipal container, ${location.city}, ${location.state}`,
+          reporterName: 'Community Assistant'
         }
       ];
 
-      const nextIssues = [...issues, ...newMockIssues];
-      updateIssues(nextIssues);
+      if (fbServices) {
+        const { db } = fbServices;
+        newMockIssues.forEach(async (issue) => {
+          try {
+            await setDoc(doc(db, 'issues', issue.id), issue);
+          } catch (err) {
+            console.error('Failed writing mock issue to Firestore:', err);
+          }
+        });
+      } else {
+        const nextIssues = [...issues, ...newMockIssues];
+        updateIssues(nextIssues);
+      }
     }
   }, [location, issues]);
 
@@ -400,13 +429,16 @@ export default function App() {
       createdAt: new Date().toISOString(),
       actionPlan: newDetails.actionPlan,
       city: location.city,
-      address: newDetails.address
+      address: newDetails.address,
+      reporterName: currentUser?.fullName || 'Anonymous Citizen'
     };
 
     if (fbServices) {
       try {
         const { db } = fbServices;
         await setDoc(doc(db, 'issues', issueId), newIssue);
+        const nextIssues = [newIssue, ...issues];
+        updateIssues(nextIssues);
       } catch (err) {
         console.error('Failed submitting issue to Firestore:', err);
         alert('Firestore write error, falling back locally.');
@@ -468,6 +500,17 @@ export default function App() {
           upvotes: nextUpvotes,
           downvotes: nextDownvotes
         });
+        const nextIssues = issues.map(i => {
+          if (i.id === issueId) {
+            return {
+              ...i,
+              upvotes: nextUpvotes,
+              downvotes: nextDownvotes
+            };
+          }
+          return i;
+        });
+        updateIssues(nextIssues);
       } catch (err) {
         console.error('Failed upvoting in Firestore:', err);
       }
@@ -537,6 +580,16 @@ export default function App() {
         await updateDoc(doc(db, 'issues', issueId), {
           comments: nextComments
         });
+        const nextIssues = issues.map(i => {
+          if (i.id === issueId) {
+            return {
+              ...i,
+              comments: nextComments
+            };
+          }
+          return i;
+        });
+        updateIssues(nextIssues);
       } catch (err) {
         console.error('Failed commenting in Firestore:', err);
       }
@@ -609,6 +662,17 @@ export default function App() {
           status: 'Resolved',
           comments: nextComments
         });
+        const nextIssues = issues.map(i => {
+          if (i.id === issueId) {
+            return {
+              ...i,
+              status: 'Resolved' as const,
+              comments: nextComments
+            };
+          }
+          return i;
+        });
+        updateIssues(nextIssues);
       } catch (err) {
         console.error('Failed resolving issue in Firestore:', err);
       }
@@ -663,6 +727,17 @@ export default function App() {
           status: newStatus,
           comments: nextComments
         });
+        const nextIssues = issues.map(i => {
+          if (i.id === issueId) {
+            return {
+              ...i,
+              status: newStatus,
+              comments: nextComments
+            };
+          }
+          return i;
+        });
+        updateIssues(nextIssues);
       } catch (err) {
         console.error('Failed status change in Firestore:', err);
       }
@@ -687,6 +762,8 @@ export default function App() {
         try {
           const { db } = fbServices;
           await deleteDoc(doc(db, 'issues', issueId));
+          const nextIssues = issues.filter(i => i.id !== issueId);
+          updateIssues(nextIssues);
           setInspectedIssueId(null);
         } catch (err) {
           console.error('Failed deleting issue in Firestore:', err);
@@ -709,6 +786,16 @@ export default function App() {
         await updateDoc(doc(db, 'issues', issueId), {
           actionPlan: planText
         });
+        const nextIssues = issues.map(i => {
+          if (i.id === issueId) {
+            return {
+              ...i,
+              actionPlan: planText
+            };
+          }
+          return i;
+        });
+        updateIssues(nextIssues);
         setEditedActionPlan(null);
         alert('Action Plan updated successfully.');
       } catch (err) {
@@ -825,7 +912,7 @@ export default function App() {
   if (!currentUser) {
     return (
       <LoginScreen 
-        onLoginSuccess={setCurrentUser} 
+        onLoginSuccess={handleLoginSuccess} 
         t={t} 
         fbServices={fbServices} 
         onDisconnectFirebase={handleDisconnectFirebase} 
@@ -857,7 +944,7 @@ export default function App() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[350px] mesh-gradient-glow rounded-full pointer-events-none z-0"></div>
 
         {currentUser.role === 'admin' ? (
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 pt-10 pb-16 space-y-8 animate-in fade-in duration-200">
+          <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 pt-10 pb-16 space-y-8 animate-in fade-in duration-200">
             {/* Top Header / Stats Row */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-canvas border border-hairline p-6 rounded-2xl shadow-level3 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#7928ca]/5 rounded-full blur-xl pointer-events-none"></div>
@@ -879,18 +966,18 @@ export default function App() {
               </div>
 
               {/* Counters */}
-              <div className="flex items-center gap-4">
-                <div className="bg-canvas border border-hairline px-4 py-3 rounded-xl shadow-level1 text-center min-w-[100px]">
-                  <span className="block text-[10px] font-mono text-mute uppercase">Pending</span>
-                  <span className="text-xl font-extrabold text-warning-deep">{activeCount}</span>
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 w-full md:w-auto">
+                <div className="bg-canvas border border-hairline px-2 sm:px-4 py-3 rounded-xl shadow-level1 text-center min-w-0 sm:min-w-[100px]">
+                  <span className="block text-[9px] sm:text-[10px] font-mono text-mute uppercase truncate">Pending</span>
+                  <span className="text-base sm:text-xl font-extrabold text-warning-deep">{activeCount}</span>
                 </div>
-                <div className="bg-canvas border border-hairline px-4 py-3 rounded-xl shadow-level1 text-center min-w-[100px]">
-                  <span className="block text-[10px] font-mono text-mute uppercase">Resolved</span>
-                  <span className="text-xl font-extrabold text-success">{resolvedCount}</span>
+                <div className="bg-canvas border border-hairline px-2 sm:px-4 py-3 rounded-xl shadow-level1 text-center min-w-0 sm:min-w-[100px]">
+                  <span className="block text-[9px] sm:text-[10px] font-mono text-mute uppercase truncate">Resolved</span>
+                  <span className="text-base sm:text-xl font-extrabold text-success">{resolvedCount}</span>
                 </div>
-                <div className="bg-canvas border border-hairline px-4 py-3 rounded-xl shadow-level1 text-center min-w-[100px]">
-                  <span className="block text-[10px] font-mono text-mute uppercase">Total</span>
-                  <span className="text-xl font-extrabold text-primary">{activeCount + resolvedCount}</span>
+                <div className="bg-canvas border border-hairline px-2 sm:px-4 py-3 rounded-xl shadow-level1 text-center min-w-0 sm:min-w-[100px]">
+                  <span className="block text-[9px] sm:text-[10px] font-mono text-mute uppercase truncate">Total</span>
+                  <span className="text-base sm:text-xl font-extrabold text-primary">{activeCount + resolvedCount}</span>
                 </div>
               </div>
             </div>
@@ -1168,7 +1255,7 @@ export default function App() {
         ) : (
           <>
             {/* Hero Area */}
-            <section className="relative z-10 max-w-[1200px] mx-auto px-6 pt-16 pb-10 text-center space-y-6">
+            <section className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 pt-10 sm:pt-16 pb-6 sm:pb-10 text-center space-y-6">
               <div className="inline-flex items-center gap-1.5 bg-canvas border border-hairline px-3 py-1 rounded-full shadow-level1">
                 <span className="inline-block w-1.5 h-1.5 bg-violet-deep rounded-full animate-pulse"></span>
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-body">Civic Automation & Tracking</span>
@@ -1182,12 +1269,12 @@ export default function App() {
                 {t.heroSubtitle}
               </p>
               
-              <div className="flex items-center justify-center gap-3">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
                 <button 
                   onClick={() => setIsReportOpen(true)}
-                  className="h-11 bg-primary text-on-primary hover:bg-primary/95 rounded-full px-6 font-semibold shadow-level4 flex items-center gap-2 transition duration-150 cursor-pointer"
+                  className="h-9 sm:h-11 bg-primary text-on-primary hover:bg-primary/95 rounded-full px-4 sm:px-6 text-xs sm:text-sm font-semibold shadow-level4 flex items-center gap-1.5 sm:gap-2 transition duration-150 cursor-pointer whitespace-nowrap"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="sm:w-4 sm:h-4"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
                   <span>{t.reportButton}</span>
                 </button>
                 
@@ -1196,7 +1283,7 @@ export default function App() {
                     setActiveTab('feed');
                     window.scrollTo({ top: 400, behavior: 'smooth' });
                   }}
-                  className="h-11 bg-canvas border border-hairline hover:bg-canvas-soft-2 rounded-full px-6 font-semibold shadow-level2 transition duration-150 cursor-pointer"
+                  className="h-9 sm:h-11 bg-canvas border border-hairline hover:bg-canvas-soft-2 rounded-full px-4 sm:px-6 text-xs sm:text-sm font-semibold shadow-level2 transition duration-150 cursor-pointer whitespace-nowrap"
                 >
                   {t.exploreMapButton}
                 </button>
@@ -1204,29 +1291,29 @@ export default function App() {
             </section>
 
             {/* Tab Controls workspace */}
-            <section className="relative z-10 max-w-[1200px] mx-auto px-6 space-y-6">
-              <div className="flex items-center justify-center sm:justify-start border-b border-hairline overflow-x-auto gap-2 pb-px select-none scrollbar-none">
+            <section className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 space-y-6">
+              <div className="flex items-center justify-start sm:justify-start border-b border-hairline overflow-x-auto gap-2 pb-px select-none scrollbar-none w-full">
                 <button 
                   onClick={() => setActiveTab('feed')}
-                  className={`pb-3 px-4 border-b-2 font-sans text-xs focus:outline-none transition cursor-pointer ${activeTab === 'feed' ? 'border-primary text-primary font-semibold' : 'border-transparent text-mute hover:text-primary font-medium'}`}
+                  className={`pb-3 px-4 border-b-2 font-sans text-xs focus:outline-none transition cursor-pointer flex-shrink-0 ${activeTab === 'feed' ? 'border-primary text-primary font-semibold' : 'border-transparent text-mute hover:text-primary font-medium'}`}
                 >
                   {t.feedTab}
                 </button>
                 <button 
                   onClick={() => setActiveTab('analytics')}
-                  className={`pb-3 px-4 border-b-2 font-sans text-xs focus:outline-none transition cursor-pointer ${activeTab === 'analytics' ? 'border-primary text-primary font-semibold' : 'border-transparent text-mute hover:text-primary font-medium'}`}
+                  className={`pb-3 px-4 border-b-2 font-sans text-xs focus:outline-none transition cursor-pointer flex-shrink-0 ${activeTab === 'analytics' ? 'border-primary text-primary font-semibold' : 'border-transparent text-mute hover:text-primary font-medium'}`}
                 >
                   {t.analyticsTab}
                 </button>
                 <button 
                   onClick={() => setActiveTab('leaderboard')}
-                  className={`pb-3 px-4 border-b-2 font-sans text-xs focus:outline-none transition cursor-pointer ${activeTab === 'leaderboard' ? 'border-primary text-primary font-semibold' : 'border-transparent text-mute hover:text-primary font-medium'}`}
+                  className={`pb-3 px-4 border-b-2 font-sans text-xs focus:outline-none transition cursor-pointer flex-shrink-0 ${activeTab === 'leaderboard' ? 'border-primary text-primary font-semibold' : 'border-transparent text-mute hover:text-primary font-medium'}`}
                 >
                   {t.leaderboardTab}
                 </button>
                 <button 
                   onClick={() => setActiveTab('contacts')}
-                  className={`pb-3 px-4 border-b-2 font-sans text-xs focus:outline-none transition cursor-pointer ${activeTab === 'contacts' ? 'border-primary text-primary font-semibold' : 'border-transparent text-mute hover:text-primary font-medium'}`}
+                  className={`pb-3 px-4 border-b-2 font-sans text-xs focus:outline-none transition cursor-pointer flex-shrink-0 ${activeTab === 'contacts' ? 'border-primary text-primary font-semibold' : 'border-transparent text-mute hover:text-primary font-medium'}`}
                 >
                   🏢 {t.contactsTab}
                 </button>
@@ -1236,7 +1323,7 @@ export default function App() {
               {activeTab === 'feed' && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                   {/* Left Column: Interactive Map */}
-                  <div className="lg:col-span-7 h-[400px] lg:h-[580px] sticky top-24">
+                  <div className="lg:col-span-7 h-[320px] sm:h-[400px] lg:h-[580px] lg:sticky lg:top-24">
                     <MapContainer 
                       issues={filteredIssues}
                       onSelectCoordinates={handleMapClick}
@@ -1270,7 +1357,7 @@ export default function App() {
                       </select>
                     </div>
 
-                    <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
+                    <div className="space-y-4 lg:max-h-[580px] lg:overflow-y-auto pr-1">
                       {filteredIssues.length === 0 ? (
                         <div className="border border-hairline border-dashed rounded-lg p-8 text-center text-xs text-mute font-mono bg-canvas select-none">
                           {t.noIssues}
@@ -1485,15 +1572,14 @@ export default function App() {
         </section>
       </main>
 
-      {/* Footer Navigation for MPA SEO */}
-      <footer className="relative z-10 w-full border-t border-hairline bg-canvas py-8 text-center text-xs text-mute font-mono space-y-3">
-        <div className="flex justify-center gap-6">
-          <a href="about.html" className="hover:text-primary transition">About Us</a>
-          <a href="privacy.html" className="hover:text-primary transition">Privacy Policy</a>
-          <a href="terms.html" className="hover:text-primary transition">Terms of Service</a>
-          <a href="contact.html" className="hover:text-primary transition">Contact Us</a>
+      <footer className="relative z-10 w-full border-t border-hairline bg-canvas py-8 text-center text-xs text-mute font-mono space-y-3 px-4">
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+          <a href="about.html" className="hover:text-primary transition whitespace-nowrap">About Us</a>
+          <a href="privacy.html" className="hover:text-primary transition whitespace-nowrap">Privacy Policy</a>
+          <a href="terms.html" className="hover:text-primary transition whitespace-nowrap">Terms of Service</a>
+          <a href="contact.html" className="hover:text-primary transition whitespace-nowrap">Contact Us</a>
         </div>
-        <p>© 2026 Community Hero Hyperlocal Solver. All rights reserved.</p>
+        <p className="leading-relaxed">© 2026 Community Hero Hyperlocal Solver. All rights reserved.</p>
       </footer>
 
 
@@ -1704,9 +1790,9 @@ export default function App() {
 
       {/* Details Inspector Modal */}
       {inspectedIssue && (
-        <div className="fixed inset-0 z-[5500] flex items-center justify-center p-4">
-          <div onClick={() => setInspectedIssueId(null)} className="absolute inset-0 bg-primary/20 backdrop-blur-[2px]"></div>
-          <div className="relative bg-canvas border border-hairline rounded-xl w-full max-w-lg p-6 shadow-level5 z-10 max-h-[90vh] overflow-y-auto flex flex-col">
+        <div className="fixed inset-0 z-[5500] flex items-center justify-center p-4 animate-fade-in">
+          <div onClick={() => setInspectedIssueId(null)} className="absolute inset-0 bg-primary/40 backdrop-blur-md"></div>
+          <div className="relative bg-canvas border border-hairline rounded-xl w-full max-w-lg p-6 shadow-level5 z-10 max-h-[90vh] overflow-y-auto flex flex-col animate-slide-up">
             
             <div className="flex items-center justify-between border-b border-hairline pb-3 mb-4">
               <div className="flex items-center gap-1.5">
@@ -1720,6 +1806,13 @@ export default function App() {
 
             <div className="space-y-4">
               <h3 className="text-base font-bold text-primary leading-snug">{inspectedIssue.title}</h3>
+
+              {inspectedIssue.reporterName && (
+                <div className="flex items-center gap-1.5 text-[10px] font-mono text-mute bg-canvas-soft border border-hairline px-2.5 py-1 rounded-full w-fit">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="text-primary"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>Reported by: <span className="font-bold text-primary">{inspectedIssue.reporterName}</span></span>
+                </div>
+              )}
 
               {inspectedIssue.image && (
                 <div className="w-full h-48 bg-canvas-soft border border-hairline rounded-lg overflow-hidden flex">
@@ -1837,7 +1930,7 @@ export default function App() {
                       <button 
                         type="button"
                         onClick={() => handleUpdateActionPlan(inspectedIssue.id)}
-                        className="h-8 bg-[#7928ca] text-on-primary hover:bg-[#7928ca]/90 text-xs px-4 rounded-full font-semibold transition mt-2 cursor-pointer shadow-level2"
+                        className="h-8 bg-[#7928ca] text-on-primary hover:bg-[#7928ca]/90 text-xs px-4 rounded-full font-semibold transition mt-2 cursor-pointer shadow-level2 active-press"
                       >
                         Save Updated Fix Plan
                       </button>
@@ -1850,7 +1943,7 @@ export default function App() {
                     <span className="font-mono text-mute">{t.persistsQ}</span>
                     <button 
                       onClick={() => handleVote(inspectedIssue.id, 'up')}
-                      className="h-8 border border-hairline rounded-full bg-canvas text-body hover:bg-canvas-soft-2 px-3 flex items-center gap-1 transition cursor-pointer font-mono"
+                      className="h-8 border border-hairline rounded-full bg-canvas text-body hover:bg-canvas-soft-2 px-3 flex items-center gap-1 transition cursor-pointer font-mono active-press"
                     >
                       <span>{t.vouch}</span>
                       <span className="font-bold">{inspectedIssue.upvotes}</span>
@@ -1862,7 +1955,7 @@ export default function App() {
                       onClick={() => {
                         handleResolveIssue(inspectedIssue.id);
                       }}
-                      className="h-8 border border-hairline rounded-full bg-primary text-on-primary hover:bg-primary/95 px-4 font-semibold transition cursor-pointer"
+                      className="h-8 border border-hairline rounded-full bg-primary text-on-primary hover:bg-primary/95 px-4 font-semibold transition cursor-pointer active-press"
                     >
                       {t.resolved}
                     </button>
@@ -1914,7 +2007,7 @@ export default function App() {
                     className="flex-1 h-9 border border-hairline bg-canvas rounded px-3 text-xs focus:outline-none focus:border-hairline-strong" 
                     placeholder={t.addComment} 
                   />
-                  <button type="submit" className="h-9 border border-hairline rounded-full bg-canvas hover:bg-canvas-soft-2 px-4 text-xs font-semibold transition cursor-pointer">
+                  <button type="submit" className="h-9 border border-hairline rounded-full bg-canvas hover:bg-canvas-soft-2 px-4 text-xs font-semibold transition cursor-pointer active-press">
                     {t.commentButton}
                   </button>
                 </form>

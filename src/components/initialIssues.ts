@@ -40,6 +40,7 @@ export interface CivicIssue {
   actionPlan: string;
   city?: string; // e.g. "Bengaluru"
   address?: string;
+  reporterName?: string;
 }
 
 export const initialIssues: CivicIssue[] = [
