@@ -117,7 +117,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="hidden sm:flex flex-col">
           <span className="font-mono uppercase tracking-widest text-[11px] font-bold text-primary">{t.appName}</span>
           <span className="text-sm font-semibold tracking-tight text-ink mt-[-2px] flex items-center gap-1.5">
-            <span>Community Hero</span>
+            <span>Local Hero</span>
             {dbStatus === 'firebase' ? (
               <span className="text-[9px] bg-success/10 text-success border border-success/20 px-1.5 py-0.5 rounded font-mono font-bold uppercase tracking-wider animate-pulse flex items-center gap-0.5">
                 <span className="inline-block w-1.5 h-1.5 bg-success rounded-full"></span>

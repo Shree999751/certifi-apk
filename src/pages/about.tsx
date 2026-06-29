@@ -13,7 +13,7 @@ const AboutPage: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-mono uppercase tracking-widest text-[11px] font-bold text-primary">HYPERLOCAL HUB</span>
-            <span className="text-sm font-semibold tracking-tight text-ink mt-[-2px]">Community Hero</span>
+            <span className="text-sm font-semibold tracking-tight text-ink mt-[-2px]">Local Hero</span>
           </div>
         </div>
 
@@ -41,7 +41,7 @@ const AboutPage: React.FC = () => {
               Connecting Citizens with Civic Action
             </h1>
             <p className="text-base text-body max-w-xl mx-auto leading-relaxed">
-              Community Hero is a hyperlocal civic governance platform designed to make reporting local hazards fast, engaging, and transparent.
+              Local Hero is a hyperlocal civic governance platform designed to make reporting local hazards fast, engaging, and transparent.
             </p>
           </div>
 
@@ -59,7 +59,7 @@ const AboutPage: React.FC = () => {
               <div className="text-xl">✨</div>
               <h2 className="text-base font-bold text-primary">AI-Assisted Efficiency</h2>
               <p className="text-xs text-body leading-relaxed">
-                Using Gemini automated multimodal interpretation, Community Hero analyzes reported photos and videos to suggest category categorizations, measure safety priorities, and formulate structured schedules to accelerate municipal response times.
+                Using Gemini automated multimodal interpretation, Local Hero analyzes reported photos and videos to suggest category categorizations, measure safety priorities, and formulate structured schedules to accelerate municipal response times.
               </p>
             </div>
 
@@ -85,7 +85,7 @@ const AboutPage: React.FC = () => {
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#50e3c2]/5 rounded-full blur-xl pointer-events-none"></div>
             <h3 className="text-sm font-bold text-primary font-mono uppercase tracking-wider">Solving Civic Issues Together</h3>
             <p className="text-xs text-body leading-relaxed max-w-lg mx-auto">
-              From open potholes and malfunctioning streetlights to water pipe leaks and garbage disposal overflow, Community Hero aggregates real-time geographical complaints to give dispatch teams actionable task logs.
+              From open potholes and malfunctioning streetlights to water pipe leaks and garbage disposal overflow, Local Hero aggregates real-time geographical complaints to give dispatch teams actionable task logs.
             </p>
             <div className="pt-2 flex justify-center gap-6 text-center select-none font-mono">
               <div>
@@ -109,7 +109,7 @@ const AboutPage: React.FC = () => {
           <a href="terms.html" className="hover:text-primary transition whitespace-nowrap">Terms of Service</a>
           <a href="contact.html" className="hover:text-primary transition whitespace-nowrap">Contact Us</a>
         </div>
-        <p className="leading-relaxed">© 2026 Community Hero Hyperlocal Solver. All rights reserved.</p>
+        <p className="leading-relaxed">© 2026 Local Hero Hyperlocal Solver. All rights reserved.</p>
       </footer>
     </div>
   );

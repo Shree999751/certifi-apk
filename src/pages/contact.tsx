@@ -32,7 +32,7 @@ const ContactPage: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-mono uppercase tracking-widest text-[11px] font-bold text-primary">HYPERLOCAL HUB</span>
-            <span className="text-sm font-semibold tracking-tight text-ink mt-[-2px]">Community Hero</span>
+            <span className="text-sm font-semibold tracking-tight text-ink mt-[-2px]">Local Hero</span>
           </div>
         </div>
 
@@ -74,7 +74,7 @@ const ContactPage: React.FC = () => {
 
               <div className="space-y-2">
                 <span className="block text-[10px] font-mono font-bold text-mute uppercase tracking-wider">Email Address</span>
-                <a href="mailto:support@communityhero.org" className="text-link font-semibold hover:underline">support@communityhero.org</a>
+                <a href="mailto:support@localhero.org" className="text-link font-semibold hover:underline">support@localhero.org</a>
               </div>
 
               <div className="space-y-2">
@@ -92,7 +92,7 @@ const ContactPage: React.FC = () => {
                   <div className="text-4xl">✉️</div>
                   <h2 className="text-base font-bold text-primary">Message Sent Successfully!</h2>
                   <p className="text-xs text-body leading-relaxed max-w-xs mx-auto">
-                    Thank you for reaching out. A Community Hero representative will review your message and reply via email within 3 business days.
+                    Thank you for reaching out. A Local Hero representative will review your message and reply via email within 3 business days.
                   </p>
                   <button 
                     onClick={() => setIsSubmitted(false)}
@@ -175,7 +175,7 @@ const ContactPage: React.FC = () => {
           <a href="terms.html" className="hover:text-primary transition whitespace-nowrap">Terms of Service</a>
           <a href="contact.html" className="hover:text-primary transition whitespace-nowrap">Contact Us</a>
         </div>
-        <p className="leading-relaxed">© 2026 Community Hero Hyperlocal Solver. All rights reserved.</p>
+        <p className="leading-relaxed">© 2026 Local Hero Hyperlocal Solver. All rights reserved.</p>
       </footer>
     </div>
   );

@@ -145,7 +145,7 @@ const triviaQuestions: TriviaQuestion[] = [
     fact: "The Swachhata App lets citizens photograph garbage spots and coordinates municipal action records."
   },
   {
-    question: "What action does Community Hero use to confirm peer validation and elevate reports to municipal officers?",
+    question: "What action does Local Hero use to confirm peer validation and elevate reports to municipal officers?",
     options: ["Registering duplicate tickets", "Upvoting / Vouching for reports", "Filing emails to the Commissioner", "Commenting raw GPS logs"],
     correctIndex: 1,
     fact: "Crowdsourced vouches provide peer audits, moving reports to high-priority resolution pipelines."
@@ -167,7 +167,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
   const levelNames: Record<number, string> = {
     1: 'Level 1: Novice Observer',
     2: 'Level 2: Active Guardian',
-    3: 'Level 3: Community Hero',
+    3: 'Level 3: Local Hero',
     4: 'Level 4: Civic Sentinel',
     5: 'Level 5: Neighborhood Legend'
   };

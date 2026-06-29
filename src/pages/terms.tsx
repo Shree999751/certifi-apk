@@ -13,7 +13,7 @@ const TermsPage: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-mono uppercase tracking-widest text-[11px] font-bold text-primary">HYPERLOCAL HUB</span>
-            <span className="text-sm font-semibold tracking-tight text-ink mt-[-2px]">Community Hero</span>
+            <span className="text-sm font-semibold tracking-tight text-ink mt-[-2px]">Local Hero</span>
           </div>
         </div>
 
@@ -48,7 +48,7 @@ const TermsPage: React.FC = () => {
           {/* Terms Content */}
           <div className="bg-canvas border border-hairline rounded-2xl shadow-level3 p-6 sm:p-8 space-y-8 text-xs text-body leading-relaxed">
             <p>
-              By accessing and using the <strong>Community Hero Civic Solver</strong> platform, you agree to comply with the terms and conditions outlined below. Please review them carefully.
+              By accessing and using the <strong>Local Hero Civic Solver</strong> platform, you agree to comply with the terms and conditions outlined below. Please review them carefully.
             </p>
 
             <section className="space-y-2">
@@ -66,7 +66,7 @@ const TermsPage: React.FC = () => {
             <section className="space-y-2">
               <h2 className="text-sm font-bold text-primary">2. Vouch & Consensus Farming</h2>
               <p>
-                Community Hero employs verification mechanics to incentivize true civic solvers.
+                Local Hero employs verification mechanics to incentivize true civic solvers.
               </p>
               <p>
                 Users are prohibited from creating multiple account profiles or coordinating with others to farm experience points (XP) or levels by upvoting (vouching for) false resolutions. Any accounts detected gaming the verification system or abusing the crowdsourcing model will have their gamification tallies reset.
@@ -76,7 +76,7 @@ const TermsPage: React.FC = () => {
             <section className="space-y-2">
               <h2 className="text-sm font-bold text-primary">3. AI-Generated Recommendation Disclaimer</h2>
               <p>
-                The fixing guides, timelines, and material action plans are generated programmatically utilizing the Gemini AI model. These recommendations are intended for initial guidance and evaluation. Users and municipal crews must exercise professional engineering judgments on the ground. Community Hero is not liable for actions taken based on automated plans.
+                The fixing guides, timelines, and material action plans are generated programmatically utilizing the Gemini AI model. These recommendations are intended for initial guidance and evaluation. Users and municipal crews must exercise professional engineering judgments on the ground. Local Hero is not liable for actions taken based on automated plans.
               </p>
             </section>
 
@@ -104,7 +104,7 @@ const TermsPage: React.FC = () => {
           <a href="terms.html" className="hover:text-primary transition whitespace-nowrap">Terms of Service</a>
           <a href="contact.html" className="hover:text-primary transition whitespace-nowrap">Contact Us</a>
         </div>
-        <p className="leading-relaxed">© 2026 Community Hero Hyperlocal Solver. All rights reserved.</p>
+        <p className="leading-relaxed">© 2026 Local Hero Hyperlocal Solver. All rights reserved.</p>
       </footer>
     </div>
   );

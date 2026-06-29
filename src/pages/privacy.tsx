@@ -13,7 +13,7 @@ const PrivacyPage: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-mono uppercase tracking-widest text-[11px] font-bold text-primary">HYPERLOCAL HUB</span>
-            <span className="text-sm font-semibold tracking-tight text-ink mt-[-2px]">Community Hero</span>
+            <span className="text-sm font-semibold tracking-tight text-ink mt-[-2px]">Local Hero</span>
           </div>
         </div>
 
@@ -50,7 +50,7 @@ const PrivacyPage: React.FC = () => {
             <section className="space-y-2">
               <h2 className="text-sm font-bold text-primary">1. Information We Collect</h2>
               <p>
-                Community Hero aggregates minimal information necessary to deliver civic solver services. This includes:
+                Local Hero aggregates minimal information necessary to deliver civic solver services. This includes:
               </p>
               <ul className="list-disc pl-5 space-y-1.5">
                 <li><strong>Geographical Location:</strong> GPS coordinates and parsed address strings associated with reported hazards.</li>
@@ -110,7 +110,7 @@ const PrivacyPage: React.FC = () => {
           <a href="terms.html" className="hover:text-primary transition whitespace-nowrap">Terms of Service</a>
           <a href="contact.html" className="hover:text-primary transition whitespace-nowrap">Contact Us</a>
         </div>
-        <p className="leading-relaxed">© 2026 Community Hero Hyperlocal Solver. All rights reserved.</p>
+        <p className="leading-relaxed">© 2026 Local Hero Hyperlocal Solver. All rights reserved.</p>
       </footer>
     </div>
   );

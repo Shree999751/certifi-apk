@@ -1419,7 +1419,7 @@ export default function App() {
               Frequently Asked Questions (FAQ)
             </h2>
             <p className="text-xs text-mute font-mono">
-              Learn how Community Hero empowers you to improve your local community.
+              Learn how Local Hero empowers you to improve your local community.
             </p>
           </div>
 
@@ -1428,7 +1428,7 @@ export default function App() {
             <details id="faq-item-1" className="group border border-hairline bg-canvas/80 backdrop-blur-sm rounded-xl overflow-hidden [&_summary::-webkit-details-marker]:hidden transition duration-150">
               <summary className="flex items-center justify-between px-5 py-4 cursor-pointer focus:outline-none hover:bg-canvas-soft-2 transition">
                 <span className="text-sm font-bold text-primary font-sans leading-snug">
-                  What is Community Hero and how does it work?
+                  What is Local Hero and how does it work?
                 </span>
                 <span className="ml-1.5 flex-shrink-0 transition duration-300 group-open:-rotate-180">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-mute group-hover:text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
@@ -1438,7 +1438,7 @@ export default function App() {
               </summary>
               <div className="px-5 pb-5 pt-1 text-xs text-body leading-relaxed border-t border-hairline/50 animate-in fade-in duration-200">
                 <p>
-                  Community Hero is a hyperlocal civic governance platform designed to empower citizens to report, track, and resolve local issues like potholes, broken streetlights, or waste accumulation. By pinning hazards on an interactive map and submitting evidence, you alert municipal officers and coordinate civic actions to make your locality safer.
+                  Local Hero is a hyperlocal civic governance platform designed to empower citizens to report, track, and resolve local issues like potholes, broken streetlights, or waste accumulation. By pinning hazards on an interactive map and submitting evidence, you alert municipal officers and coordinate civic actions to make your locality safer.
                 </p>
               </div>
             </details>
@@ -1495,7 +1495,7 @@ export default function App() {
               </summary>
               <div className="px-5 pb-5 pt-1 text-xs text-body leading-relaxed border-t border-hairline/50 animate-in fade-in duration-200">
                 <p>
-                  Community Hero rewards civic engagement through a points and gamification system. You earn 50 points for submitting a new report, 10 points for verifying/upvoting an issue, and 10 points for leaving comments. Accumulating points helps you level up and earn specialized badges such as &ldquo;Pothole Patrol&rdquo; or &ldquo;Super Verifier.&rdquo;
+                  Local Hero rewards civic engagement through a points and gamification system. You earn 50 points for submitting a new report, 10 points for verifying/upvoting an issue, and 10 points for leaving comments. Accumulating points helps you level up and earn specialized badges such as &ldquo;Pothole Patrol&rdquo; or &ldquo;Super Verifier.&rdquo;
                 </p>
               </div>
             </details>
@@ -1528,10 +1528,10 @@ export default function App() {
               "mainEntity": [
                 {
                   "@type": "Question",
-                  "name": "What is Community Hero and how does it work?",
+                  "name": "What is Local Hero and how does it work?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Community Hero is a hyperlocal civic governance platform designed to empower citizens to report, track, and resolve neighborhood issues like potholes, broken streetlights, or waste accumulation. By pinning hazards on an interactive map and submitting evidence, you alert municipal officers and coordinate civic actions to make your locality safer."
+                    "text": "Local Hero is a hyperlocal civic governance platform designed to empower citizens to report, track, and resolve neighborhood issues like potholes, broken streetlights, or waste accumulation. By pinning hazards on an interactive map and submitting evidence, you alert municipal officers and coordinate civic actions to make your locality safer."
                   }
                 },
                 {
@@ -1555,7 +1555,7 @@ export default function App() {
                   "name": "What rewards do I earn for participating in civic actions?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Community Hero rewards civic engagement through a points and gamification system. You earn 50 points for submitting a new report, 10 points for verifying/upvoting an issue, and 10 points for leaving comments. Accumulating points helps you level up and earn specialized badges such as \"Pothole Patrol\" or \"Super Verifier.\""
+                    "text": "Local Hero rewards civic engagement through a points and gamification system. You earn 50 points for submitting a new report, 10 points for verifying/upvoting an issue, and 10 points for leaving comments. Accumulating points helps you level up and earn specialized badges such as \"Pothole Patrol\" or \"Super Verifier.\""
                   }
                 },
                 {
@@ -1579,7 +1579,7 @@ export default function App() {
           <a href="terms.html" className="hover:text-primary transition whitespace-nowrap">Terms of Service</a>
           <a href="contact.html" className="hover:text-primary transition whitespace-nowrap">Contact Us</a>
         </div>
-        <p className="leading-relaxed">© 2026 Community Hero Hyperlocal Solver. All rights reserved.</p>
+        <p className="leading-relaxed">© 2026 Local Hero Hyperlocal Solver. All rights reserved.</p>
       </footer>
 
 
